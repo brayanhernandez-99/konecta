@@ -12,12 +12,13 @@ use League\Flysystem\RootViolationException;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', 'UserController@home')->name('users.home');
-Route::get('/usuarios', 'UserController@index')->name('users.index');
-Route::get('/usuarios/{id}', 'UserController@show')->where('id', '[0-9]+');
-Route::get('/usuarios/{id}/editar', 'UserController@edit')->name('users.edit');
-Route::get('/usuarios/{id}/eliminar', 'UserController@delete')->name('users.delete');
-Route::post('/usuarios/actualizar', 'UserController@update')->name('users.update');
-Route::get('/usuarios/nuevo', 'UserController@create')->name('users.create');
-Route::post('/usuarios/crear', 'UserController@newuser')->name('users.newuser');
+Route::get('/', 'UserController@index')->name('users.index');
+Route::get('/usuarios', 'UserController@home')->name('users.home');
+Route::get('/usuarios/registarse', 'UserController@register')->name('users.register');
 
+Route::get('/usuarios/ver/{id}', 'UserController@show')->where('id', '[0-9]+')->name('users.show');
+Route::get('/usuarios/editar/{id}', 'UserController@edit')->name('users.edit');
+Route::get('/usuarios/eliminar/{id}', 'UserController@delete')->name('users.delete');
+
+Route::post('/usuarios/registrado', 'UserController@create')->name('users.create');
+Route::post('/usuarios/actualizar/{id}', 'UserController@update')->name('users.update');

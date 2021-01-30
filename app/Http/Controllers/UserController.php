@@ -10,40 +10,47 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
-    public function home()
-    {
-        return view('home');
-    }
-
     public function index()
     {
+        return view('index');
+    }
+
+    public function home()
+    {
         $users = User::all();
-        $title = 'Listado de usuarios';
-        return view('users.index', compact('title', 'users'));
+        $title = 'Listado Usuarios';
+        return view('users.home', compact('title', 'users'));
     }
 
     public function show($id)
     {
         $user = User::find($id);
-        $title = 'Detalle de usuario';
+        $title = 'Detalle Usuario';
         return view('users.show', compact('title', 'user'));
+    }
+
+    public function register()
+    {
+        $title = 'Crear Usuario';
+        return view('users.register', compact('title'));
+    }
+
+    public function edit($id)
+    {
+        $user = User::find($id);
+        $title = 'Editar Usuario';
+        return view('users.edit', compact('title', 'user'));
     }
 
     public function create()
     {
-        $title = 'Crear usuario';
-        return view('users.create', compact('title'));
-    }
-
-    public function newuser()
-    {
+        $title = 'Usuario Registrado';
         $data = request()->validate([
             'name' => 'required|string',
             'document' => 'required|numeric',
             'email' => 'required|email|unique:users,email',
             'address' => 'required|string'
         ]);
-        $title = 'Nuevo usuario registrado';
 
         try {
             User::create([
@@ -52,50 +59,40 @@ class UserController extends Controller
                 'email' => $data['email'],
                 'address' => $data['address']
             ]);
-            return view('users.new', compact('title', 'data'));
+            return view('users.create', compact('title', 'data'));
         } catch (\Throwable $error) {
             throw $error;
-            return view('layout');
         }
-    }
-
-    public function edit($id)
-    {
-        $user = User::find($id);
-        $title = 'Editar usuario';
-        return view('users.edit', compact('title', 'user'));
     }
 
     public function update()
     {
+        $title = 'Usuario Actualizado';
         $data = request()->validate([
             'name' => 'required|string',
             'document' => 'required|numeric',
             'email' => 'required|email',
             'address' => 'required|string'
         ]);
-        $title = 'Usuario Actualizado';
 
         try {
             $affectedRows = User::where('email', '=', $data['email'])->update($data);
             return view('users.update', compact('title', 'affectedRows', 'data'));
         } catch (\Throwable $error) {
             throw $error;
-            return view('layout');
         }
     }
 
     public function delete($id)
     {
         $user = User::find($id);
-        $title = 'Usuario eliminado';
+        $title = 'Usuario Eliminado';
 
         try {
             $affectedRows = User::where('id', '=', $id)->delete();
-            return view('users.delete', compact('title', 'affectedRows', 'user'));
+            return view('users.delete', compact('title', 'user', 'affectedRows'));
         } catch (\Throwable $error) {
             throw $error;
-            return view('layout');
         }
     }
 }
